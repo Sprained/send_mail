@@ -30,6 +30,7 @@ class CustomEnvironment extends NodeEnvironment {
 
   teardown() {
     con.query('DROP DATABASE supertest')
+    con.destroy()
   }
 }
 
