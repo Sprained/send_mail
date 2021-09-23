@@ -4,7 +4,7 @@
 
 import { PrismaClient } from '@prisma/client'
 
-import UserRepository from '../../src/repositories/UserRepository'
+import UserRepository from '../../../src/repositories/UserRepository'
 
 const prisma = new PrismaClient()
 
