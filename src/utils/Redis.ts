@@ -9,7 +9,7 @@ const client = redis.createClient({
 
 class Redis {
   async register_jwt({ token, expiresIn, id }: IJWTRegister) {
-    client.set(token, id)
+    client.set(token, JSON.stringify(id))
     client.expire(token, expiresIn)
   }
 }
