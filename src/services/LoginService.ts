@@ -3,7 +3,9 @@ import jwt from 'jsonwebtoken'
 
 import LoginRepository from '../repositories/UserRepository'
 import { ILoginCreate } from '../interfaces/LoginInterface'
+import { IJWTRegister } from '../interfaces/RedisInterface'
 import { Handler } from '../errors/Handler'
+import Redis from '../utils/Redis'
 
 class LoginService {
   async create({ email, password }: ILoginCreate): Promise<string> {
@@ -17,7 +19,18 @@ class LoginService {
       throw new Handler(401, 'Incorrect user or password')
     }
 
-    const token = jwt.sign({ id: user.id }, 'teste')
+    const expiresIn = parseInt(process.env.EXPIRE_TOKEN as string)
+    const token = jwt.sign({}, (process.env.TOKEN_SECRET as string), {
+      expiresIn: expiresIn
+    })
+
+    const redisBody: IJWTRegister = {
+      token,
+      expiresIn,
+      id: user.id
+    }
+
+    Redis.register_jwt(redisBody)
 
     return token
   }
