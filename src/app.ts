@@ -1,28 +1,31 @@
-import 'dotenv/config';
+import 'dotenv/config'
 
-import express from 'express';
-import cors from 'cors';
+import swaggerUi from 'swagger-ui-express'
+import express from 'express'
+import cors from 'cors'
 
-// import routes from './routes';
+import routes from './routes'
+import swaggerDocs from './swagger.json'
 
 class App {
-    server: any;
+    server: any
     
     constructor() {
-        this.server = express();
+        this.server = express()
 
-        this.middlewares();
-        this.routes();
+        this.middlewares()
+        this.routes()
     }
 
     middlewares() {
-        this.server.use(cors());
-        this.server.use(express.json());
+        this.server.use(cors())
+        this.server.use(express.json())
     }
 
     routes() {
-        // this.server.use(routes);
+        this.server.use('/v1', routes)
+        this.server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
     }
 }
 
-export default new App().server;
+export default new App().server
