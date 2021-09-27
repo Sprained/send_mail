@@ -14,7 +14,7 @@ describe('Login', () => {
       password: process.env.ADMIN_PASS as string
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     expect(response.status).toBe(200)
     expect(response.body).toHaveProperty('token')
@@ -26,7 +26,7 @@ describe('Login', () => {
       password: process.env.ADMIN_PASS as string
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     expect(response.status).toBe(401)
     expect(response.body).toHaveProperty('error')
@@ -39,7 +39,7 @@ describe('Login', () => {
       password: '123'
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     expect(response.status).toBe(401)
     expect(response.body).toHaveProperty('error')
@@ -51,7 +51,7 @@ describe('Login', () => {
       email:  process.env.ADMIN_EMAIL as string
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     const responseError = {
       msg: "Password is required",
@@ -69,7 +69,7 @@ describe('Login', () => {
       password: process.env.ADMIN_PASS as string
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     const responseError = {
       msg: "Email is required",
@@ -88,7 +88,7 @@ describe('Login', () => {
       password: process.env.ADMIN_PASS as string
     }
 
-    const response = await request(App).post('/login').send(body);
+    const response = await request(App).post('/v1/login').send(body);
 
     const responseError = {
       msg: "Invalid email format",

@@ -1,9 +1,11 @@
 import 'dotenv/config'
 
+import swaggerUi from 'swagger-ui-express'
 import express from 'express'
 import cors from 'cors'
 
 import routes from './routes'
+import swaggerDocs from './swagger.json'
 
 class App {
     server: any
@@ -21,7 +23,8 @@ class App {
     }
 
     routes() {
-        this.server.use(routes)
+        this.server.use('/v1', routes)
+        this.server.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
     }
 }
 

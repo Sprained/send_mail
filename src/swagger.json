@@ -1,0 +1,58 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sem Mail",
+    "description": "Microserviço para envio de email",
+    "contact": {
+      "email": "gabriel.almeida.resende@gmail.com"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333/v1",
+      "description": "Api Dev"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "post": {
+        "summary": "Login admin no painel",
+        "description": "Endpoint para login no painel administrativo",
+        "tags": ["Auth"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Login"
+              },
+              "examples": {
+                "login": {
+                  "values": {
+                    "email": "admin@email.com",
+                    "password": "adm@123"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Login": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
