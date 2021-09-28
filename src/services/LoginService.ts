@@ -27,7 +27,11 @@ class LoginService {
     const redisBody: IJWTRegister = {
       token,
       expiresIn,
-      id: { admin: user.id }
+      id: {
+        admin: {
+          id: user.id
+        }
+      }
     }
 
     Redis.register_jwt(redisBody)
