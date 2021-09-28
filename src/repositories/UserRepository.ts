@@ -21,7 +21,7 @@ class UserRepository {
     return user
   }
 
-  async get_user_by_phone(phone: number): Promise<User | null> {
+  async get_user_by_phone(phone: string): Promise<User | null> {
     const user = await prisma.user.findFirst({
       where: {
         phone: phone

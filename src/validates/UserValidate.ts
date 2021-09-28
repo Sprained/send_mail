@@ -9,7 +9,6 @@ export const createUser = () => {
       .isEmail().withMessage('Invalid email format'),
     body('phone')
       .exists().withMessage('Phone is required')
-      .isNumeric().withMessage('Phone is numeric')
       .isLength({ min: 11, max: 11 }).withMessage('Phone size has to be eleven')
   ]
 }

@@ -12,7 +12,7 @@ model User {
   name String?
   email String @unique
   password String
-  phone Int?
+  phone String? @db.Char(11)
   fistAccess Boolean @default(true)
 
   created_at DateTime @default(now())
@@ -45,7 +45,7 @@ model UserLog {
   body Json
 
   admin User @relation("adminLog", fields: [adminId], references: [id])
-  user User @relation("userLog", fields: [userCreated], references: [id])
+  user User @relation("userLog", fields: [userCreated], references: [id], onDelete: Cascade)
 
   @@map("user_logs")
 }
@@ -55,5 +55,5 @@ model UserPassword {
   password String
   userId String
 
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
