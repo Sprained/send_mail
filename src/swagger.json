@@ -14,21 +14,50 @@
       "description": "Api Dev"
     }
   ],
+  "tags": [
+    {
+      "name": "Login"
+    },
+    {
+      "name": "User"
+    }
+  ],
+  "schemes": [
+    "https",
+    "http"
+  ],
+  "components": {
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  },
   "paths": {
-    "/products": {
+    "/login": {
       "post": {
-        "summary": "Login admin no painel",
-        "description": "Endpoint para login no painel administrativo",
-        "tags": ["Auth"],
+        "tags": [
+          "Login"
+        ],
+        "summary": "Login",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/Login"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  }
+                }
               },
               "examples": {
-                "login": {
-                  "values": {
+                "Login Admin": {
+                  "value": {
                     "email": "admin@email.com",
                     "password": "adm@123"
                   }
@@ -36,20 +65,213 @@
               }
             }
           }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Token": {
+                    "value": {
+                      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzI5MjA4MDUsImV4cCI6MTYzMjkzNTIwNX0.ShcnY3qdFSep3zlL8Sft8gLRY3Xd61a87o2BbUwgJOY"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV) (RFC 4918)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erros": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "msg": {
+                            "type": "string"
+                          },
+                          "param": {
+                            "type": "string"
+                          },
+                          "location": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Body error": {
+                    "value": {
+                      "errors": [
+                        {
+                            "msg": "Email is required",
+                            "param": "email",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Invalid email format",
+                            "param": "email",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Password is required",
+                            "param": "password",
+                            "location": "body"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
-    }
-  },
-  "components": {
-    "schemas": {
-      "Login": {
-        "type": "object",
-        "properties": {
-          "email": {
-            "type": "string"
+    },
+    "/user": {
+      "post": {
+        "security": [{ "Bearer": [] }],
+        "tags": [
+          "User"
+        ],
+        "summary": "Create new user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "Create New Admin": {
+                  "value": {
+                    "email": "teste@email.com",
+                    "phone": "12345678901",
+                    "name": "teste"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created"
           },
-          "password": {
-            "type": "string"
+          "409": {
+            "description": "Conflit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "examples": {
+                  "Conflit email": {
+                    "value": {
+                      "error": "User already exists"
+                    }
+                  },
+                  "Conflit phone": {
+                    "value": {
+                      "error": "Phone is already in use"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV) (RFC 4918)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erros": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "msg": {
+                            "type": "string"
+                          },
+                          "param": {
+                            "type": "string"
+                          },
+                          "location": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Body error": {
+                    "value": {
+                      "errors": [
+                        {
+                            "msg": "Name is required",
+                            "param": "name",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Email is required",
+                            "param": "email",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Invalid email format",
+                            "param": "email",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Phone is required",
+                            "param": "phone",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Phone size has to be eleven",
+                            "param": "phone",
+                            "location": "body"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           }
         }
       }

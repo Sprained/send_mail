@@ -1,6 +1,7 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, User } from '@prisma/client'
 
 import { ILoginGet } from '../interfaces/LoginInterface'
+import { ICreateUSer } from '../interfaces/UserInterface'
 
 const prisma = new PrismaClient()
 
@@ -18,6 +19,42 @@ class UserRepository {
     })
 
     return user
+  }
+
+  async get_user_by_phone(phone: string): Promise<User | null> {
+    const user = await prisma.user.findFirst({
+      where: {
+        phone: phone
+      }
+    })
+
+    return user
+  }
+
+  async create({ email, name, phone, adminId, password }: ICreateUSer) {
+    await prisma.user.create({
+      data: {
+        email,
+        name,
+        phone,
+        password,
+        userPassword: {
+          create: {
+            password: password
+          }
+        },
+        userLog: {
+          create: {
+            adminId,
+            body: {
+              email, name, phone
+            }
+          }
+        }
+      }
+    })
+
+    return
   }
 }
 

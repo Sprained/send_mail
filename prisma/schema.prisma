@@ -12,9 +12,15 @@ model User {
   name String?
   email String @unique
   password String
+  phone String? @db.Char(11)
+  fistAccess Boolean @default(true)
 
   created_at DateTime @default(now())
   updated_at DateTime @default(now()) @updatedAt
+
+  adminLog UserLog[] @relation("adminLog")
+  userLog UserLog? @relation("userLog")
+  userPassword UserPassword[]
 
   @@map("users")
 }
@@ -30,4 +36,24 @@ model Contact {
   updated_at DateTime @default(now()) @updatedAt
 
   @@map("contacts")
+}
+
+model UserLog {
+  id String @id @default(uuid())
+  adminId String
+  userCreated String
+  body Json
+
+  admin User @relation("adminLog", fields: [adminId], references: [id])
+  user User @relation("userLog", fields: [userCreated], references: [id], onDelete: Cascade)
+
+  @@map("user_logs")
+}
+
+model UserPassword {
+  id String @id @default(uuid())
+  password String
+  userId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

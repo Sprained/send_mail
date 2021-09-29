@@ -3,3 +3,12 @@ export interface IJWTRegister {
   expiresIn: number,
   id: object
 }
+
+export interface IJWTGet {
+  admin?: IBaseJwtGet,
+  user?: IBaseJwtGet
+}
+
+interface IBaseJwtGet {
+  id: string
+}

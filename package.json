@@ -7,7 +7,7 @@
   "license": "MIT",
   "scripts": {
     "tsc": "tsc",
-    "dev": "nodemon --watch 'src/' --exec 'ts-node src/server.ts' -e ts",
+    "dev": "ts-node-dev --files --debug --exit-child src/server.ts",
     "test": "jest",
     "prepare": "husky install"
   },

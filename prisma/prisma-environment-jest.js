@@ -24,6 +24,10 @@ class CustomEnvironment extends NodeEnvironment {
     this.global.process.env.DATABASE_URL = this.url
     this.global.process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL
     this.global.process.env.ADMIN_PASS = process.env.ADMIN_PASS
+    this.global.process.env.TOKEN_SECRET = process.env.TOKEN_SECRET
+    this.global.process.env.EXPIRE_TOKEN = process.env.EXPIRE_TOKEN
+    this.global.process.env.port = process.env.port
+    this.global.process.env.REDIS_HOST = process.env.REDIS_HOST
 
     execSync(`${prismaCli} migrate dev`)
     execSync(`${tsNode} prisma/seed.ts`)
