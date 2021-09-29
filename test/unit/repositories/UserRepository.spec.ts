@@ -27,4 +27,18 @@ describe('User repository', () => {
     
     expect(response).toBeNull()
   })
+
+  it('select user by phone', async () => {
+    const user = await prisma.user.create({
+      data: {
+        email: 'teste@email.com',
+        password: 'teste',
+        phone: '12345678901'
+      }
+    })
+
+    const response = await UserRepository.get_user_by_phone(user.phone)
+
+    expect(response).toStrictEqual(user)
+  })
 })
