@@ -7,6 +7,6 @@ import AdminMiddleware from '../middlewares/Admin'
 const routes = Router()
 
 routes.use(AdminMiddleware.veriry)
-routes.route('/user').post(UserController.create)
+routes.route('/user').post(createUser(), UserController.create)
 
 export default routes
