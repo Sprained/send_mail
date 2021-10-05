@@ -1,14 +1,11 @@
-import { validationResult } from 'express-validator'
 import { Response, Request } from 'express'
 
 import LoginService from '../services/LoginService'
+import ValidationErrors from '../errors/ValidationErrors';
 
 class LoginController {
   async create(req: Request, res: Response) {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() });
-    }
+    ValidationErrors.erro422(req, res)
 
     try {
       const login: string = await LoginService.create(req.body)

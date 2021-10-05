@@ -1,14 +1,11 @@
-import { validationResult } from 'express-validator'
 import { Response, Request } from 'express'
 
 import UserService from '../../services/User/UserService'
+import ValidationErrors from '../../errors/ValidationErrors'
 
 class UserController {
   async create(req: Request, res: Response) {
-    const errors = validationResult(req)
-    if (!errors.isEmpty()) {
-      return res.status(422).json({ errors: errors.array() })
-    }
+    ValidationErrors.erro422(req, res)
     
     try {
       req.body.adminId = req.user.id
