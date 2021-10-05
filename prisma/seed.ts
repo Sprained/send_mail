@@ -13,6 +13,28 @@ async function main() {
       }
     })
   }
+
+  await prisma.configMail.create({
+    data: {
+      type: 'NODEMAILER'
+    }
+  })
+  
+  await prisma.credentialsNodemailer.create({
+    data: {
+      host: '',
+      pass: '',
+      port: 587,
+      user: ''
+    }
+  })
+
+  await prisma.credentialsAws.create({
+    data: {
+      awsAccessKeyId: '',
+      awsSecretAccessKey: ''
+    }
+  })
 }
 
 main()

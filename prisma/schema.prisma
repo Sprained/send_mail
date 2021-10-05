@@ -57,3 +57,32 @@ model UserPassword {
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
+model ConfigMail {
+  id String @id @default(uuid())
+  type TypeMail
+
+  @@map("config_mail")
+}
+
+enum TypeMail {
+  NODEMAILER
+  AWS
+}
+
+model CredentialsAws {
+  id String @id @default(uuid())
+  awsAccessKeyId String
+  awsSecretAccessKey String
+
+  @@map("credentials_aws")
+}
+
+model CredentialsNodemailer {
+  id String @id @default(uuid())
+  host String
+  port Int
+  secure Boolean @default(false)
+  user String
+  pass String
+}
