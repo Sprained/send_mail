@@ -275,6 +275,93 @@
           }
         }
       }
+    },
+    "/mail/switch": {
+      "put": {
+        "security": [{ "Bearer": [] }],
+        "tags": [
+          "Mail"
+        ],
+        "summary": "Switch type mail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                   "type": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "AWS": {
+                  "value": {
+                    "type": "AWS"
+                  }
+                },
+                "NODEMAILER": {
+                  "value": {
+                    "type": "NODEMAILER"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "422": {
+            "description": "Unprocessable Entity (WebDAV) (RFC 4918)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "erros": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "msg": {
+                            "type": "string"
+                          },
+                          "param": {
+                            "type": "string"
+                          },
+                          "location": {
+                            "type": "string"
+                          }
+                        }
+                      }
+                    }
+                  }
+                },
+                "examples": {
+                  "Body error": {
+                    "value": {
+                      "errors": [
+                        {
+                            "msg": "Type is required",
+                            "param": "type",
+                            "location": "body"
+                        },
+                        {
+                            "msg": "Type must be NODEMAILER or AWS",
+                            "param": "type",
+                            "location": "body"
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
