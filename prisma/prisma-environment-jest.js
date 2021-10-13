@@ -1,8 +1,10 @@
 const NodeEnvironment = require('jest-environment-node')
-const { execSync } = require('child_process')
+const { exec } = require('child_process')
 const { v4: uuid } = require('uuid')
 const { resolve } = require('path')
 const { Client } = require('pg')
+
+const util = require('util')
 
 require('dotenv').config({
   path: resolve(__dirname, '..', '.env.test')
@@ -10,6 +12,7 @@ require('dotenv').config({
 
 const prismaCli = "./node_modules/.bin/prisma"
 const tsNode = "./node_modules/.bin/ts-node"
+const execSync = util.promisify(exec)
 
 class CustomEnvironment extends NodeEnvironment {
   constructor(config) {
@@ -19,7 +22,7 @@ class CustomEnvironment extends NodeEnvironment {
     this.url = `${process.env.DATABASE_URL}${this.uuid}`
   }
   
-  setup() {
+  async setup() {
     process.env.DATABASE_URL = this.url
     this.global.process.env.DATABASE_URL = this.url
     this.global.process.env.ADMIN_EMAIL = process.env.ADMIN_EMAIL
@@ -29,8 +32,10 @@ class CustomEnvironment extends NodeEnvironment {
     this.global.process.env.port = process.env.port
     this.global.process.env.REDIS_HOST = process.env.REDIS_HOST
 
-    execSync(`${prismaCli} migrate dev`)
-    execSync(`${tsNode} prisma/seed.ts`)
+    await execSync(`${prismaCli} migrate deploy --preview-feature`)
+    await execSync(`${tsNode} prisma/seed.ts`)
+
+    return super.setup()
   }
 
   async teardown() {
