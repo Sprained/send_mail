@@ -362,6 +362,69 @@
           }
         }
       }
+    },
+    "/mail/infos": {
+      "patch": {
+        "security": [{ "Bearer": [] }],
+        "tags": [
+          "Mail"
+        ],
+        "summary": "Switch type mail",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "awsAccessKeyId": {
+                    "type": "string"
+                  },
+                  "awsSecretAccessKey": {
+                    "type": "string"
+                  },
+                  "host": {
+                    "type": "string"
+                  },
+                  "port": {
+                    "type": "number"
+                  },
+                  "secure": {
+                    "type": "boolean"
+                  },
+                  "user": {
+                    "type": "string"
+                  },
+                  "pass": {
+                    "type": "string"
+                  }
+                }
+              },
+              "examples": {
+                "AWS": {
+                  "value": {
+                    "awsAccessKeyId": "teste",
+                    "awsSecretAccessKey": "teste"
+                  }
+                },
+                "NODEMAILER": {
+                  "value": {
+                    "host": "teste",
+                    "port": 999,
+                    "secure": false,
+                    "user": "teste",
+                    "pass": "teste"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "204": {
+            "description": "No Content"
+          }
+        }
+      }
     }
   }
 }
