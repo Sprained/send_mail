@@ -3,40 +3,49 @@
  */
 
 import { PrismaClient } from '@prisma/client'
+import request from 'supertest'
 
-import MailConfigService from '../../../../src/services/Mail/MailConfigService'
-import { IAWSInfosUp, INodemailerInfosUp } from '../../../../src/interfaces/MailInterface'
+import { IUpdateInfosMail } from '../../../src/interfaces/MailInterface'
+import App from '../../../src/app'
 
 const prisma = new PrismaClient()
 
-describe('Mail Config Service', () => {
+describe('update infos nodemailer and aws', () => {
+  let token: string
 
-  it('update type mais config', async () => {
-    let mail = await prisma.configMail.findFirst()
-
-    expect(mail.type).toBe('NODEMAILER')
-
-    await MailConfigService.change_mail_sender({ type: 'AWS' })
-
-    mail = await prisma.configMail.findFirst()
-
-    expect(mail.type).toBe('AWS')
+  beforeAll(async () => {
+    const body = {
+      email: process.env.ADMIN_EMAIL as string,
+      password: process.env.ADMIN_PASS as string
+    }
+  
+    const response = await request(App).post('/v1/login').send(body);
+    token = response.body.token
   })
 
   it('update infos mail', async () => {
-    let body: IAWSInfosUp | INodemailerInfosUp = {
+    //Config AWS
+    let body: IUpdateInfosMail = {
       awsAccessKeyId: 'teste',
       awsSecretAccessKey: 'teste'
     }
 
-    await MailConfigService.updateInfosMail(body)
+    await prisma.configMail.updateMany({
+      data: {
+        type: 'AWS'
+      }
+    })
+
+    let response = await request(App).patch('/v1/mail/infos').auth(token, { type: 'bearer' }).send(body)
+
+    expect(response.status).toBe(204)
 
     let mail: any = await prisma.credentialsAws.findFirst()
 
     expect(mail.awsAccessKeyId).toBe(body.awsSecretAccessKey)
     expect(mail.awsSecretAccessKey).toBe(body.awsSecretAccessKey)
 
-    // Fields Nodemailer
+    //Config Nodemailer
     body = {
       host: 'teste',
       port: 999,
@@ -51,7 +60,7 @@ describe('Mail Config Service', () => {
       }
     })
 
-    await MailConfigService.updateInfosMail(body)
+    response = await request(App).patch('/v1/mail/infos').auth(token, { type: 'bearer' }).send(body)
 
     mail = await prisma.credentialsNodemailer.findFirst()
 

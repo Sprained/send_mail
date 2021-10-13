@@ -15,7 +15,7 @@ describe('Mail repository', () => {
 
     expect(mail.type).toBe('NODEMAILER')
 
-    await MailRepository.change_mail_sender('AWS')
+    await MailRepository.change_mail_sender({ type: 'AWS' })
 
     mail = await prisma.configMail.findFirst()
 
