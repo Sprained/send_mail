@@ -3,16 +3,21 @@ import { PrismaClient, TypeMail } from '@prisma/client'
 const prisma = new PrismaClient()
 
 class MailRepository {
-  async change_mail_sender(type: 'NODEMAILER' | 'AWS') {
+  async change_mail_sender(type): Promise<void> {
+    const data = type
     await prisma.configMail.updateMany({
-      data: {
-        type: {
-          set: type === 'NODEMAILER' ? TypeMail.NODEMAILER : TypeMail.AWS
-        }
+      data
+    })
+  }
+
+  async get_type_mail(): Promise<string> {
+    const mail = await prisma.configMail.findFirst({
+      select: {
+        type: true
       }
     })
 
-    return
+    return mail.type
   }
 }
 

@@ -15,7 +15,16 @@ class ConfigMailController {
 
       return res.status(204).send()
     } catch (error) {
-      console.log(error)
+      return res.status(error.statusCode).send({ 'error': error.message })
+    }
+  }
+
+  async updateInfosMail(req: Request, res: Response): Promise<Response> {
+    try {
+      await MailConfigService.updateInfosMail(req.body)
+
+      return res.status(204).send()
+    } catch (error) {
       return res.status(error.statusCode).send({ 'error': error.message })
     }
   }
